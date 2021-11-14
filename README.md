@@ -78,13 +78,34 @@ spec:
 ```
 $ kubectl get services
 NAME                                                    TYPE           CLUSTER-IP       EXTERNAL-IP       PORT(S)          AGE
-facerecognizer-srv                                      LoadBalancer   10.97.104.96     192.168.122.221   5000:30002/TCP   14h
+facerecognizer-srv                                      LoadBalancer   10.97.104.96     192.168.122.221   5000:32375/TCP   14h
 gpu-operator                                            ClusterIP      10.107.20.212    <none>            8080/TCP         12d
 gpu-operator-1635474989-node-feature-discovery-master   ClusterIP      10.101.66.193    <none>            8080/TCP         12d
 kubernetes                                              ClusterIP      10.96.0.1        <none>            443/TCP          12d
+
+$ curl 192.168.122.221:5000
+<html>
+  <head>
+    <title>Wellcome</title>
+  </head>
+  <body>
+    <h1>Wellcome</h1>
+    <a href="./stream">Face Recognizer</a> <br>
+    <a href="./nvidia-smi">nvidia-smi</a> <br>
+  </body>
+</html>
 ```
 
 # 4. istio Gateway
+Setup back again from LoadBalancer to ClusterIP about facerecognizer-srv as like below:
+```
+$ kubectl get service
+NAME                                                    TYPE           CLUSTER-IP       EXTERNAL-IP       PORT(S)             AGE
+facerecognizer-srv                                      ClusterIP      10.97.104.96     <none>            5000/TCP            3d20h
+gpu-operator                                            ClusterIP      10.110.206.144   <none>            8080/TCP            2d9h
+gpu-operator-1636672240-node-feature-discovery-master   ClusterIP      10.108.73.244    <none>            8080/TCP            2d9h
+kubernetes                                              ClusterIP      10.96.0.1        <none>            443/TCP             16d
+```
 ```
 $ kubectl apply -f - << EOF 
 apiVersion: networking.istio.io/v1alpha3
@@ -130,6 +151,18 @@ facerecognizer-gateway   12s
 $ kubectl get virtualservices
 NAME                  GATEWAYS                     HOSTS   AGE
 facerecognizer-vsrv   ["facerecognizer-gateway"]   ["*"]   20s
+```
+```
+$ kubectl get service -n istio-system
+NAME                   TYPE           CLUSTER-IP       EXTERNAL-IP       PORT(S)                                      AGE
+grafana                ClusterIP      10.99.253.178    <none>            3000/TCP                                     4d17h
+istio-ingressgateway   LoadBalancer   10.108.210.157   192.168.122.220   15021:30468/TCP,80:31701/TCP,443:32689/TCP   4d18h
+istiod                 ClusterIP      10.106.19.192    <none>            15010/TCP,15012/TCP,443/TCP,15014/TCP        4d18h
+jaeger-collector       ClusterIP      10.99.26.141     <none>            14268/TCP,14250/TCP,9411/TCP                 4d17h
+kiali                  ClusterIP      10.99.179.7      <none>            20001/TCP,9090/TCP                           4d17h
+prometheus             ClusterIP      10.99.161.179    <none>            9090/TCP                                     4d17h
+tracing                ClusterIP      10.108.74.27     <none>            80/TCP,16685/TCP                             4d17h
+zipkin                 ClusterIP      10.101.155.214   <none>            9411/TCP                                     4d17h
 ```
 ```
 $ curl 192.168.122.220

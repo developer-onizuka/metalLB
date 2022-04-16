@@ -1,5 +1,8 @@
 # metalLB & istio at BareMetal Machine
 
+If you want to use LoadBalancer in Onprem, then the controller that interprets the LoadBalancer Service needs to be deployed in the Kubernetes cluster. <br>
+But, when you deploy the MetalLB to a Kubernetes cluster, it assigns a virtual IP address that can be accessed from outside the cluster to the Load Balancer Service.
+
 # 1. Installation
 - https://metallb.universe.tf/installation/
 ```

@@ -11,6 +11,16 @@ kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.11.0/manif
 ```
 
 # 2. Configuration
+
+There are two types for network mode :
+
+- layer 2: In layer 2 mode, one machine in the cluster takes ownership of the service, and uses standard address discovery protocols (ARP for IPv4, NDP for IPv6) to make those IPs reachable on the local network.
+
+- layer 3 by BGP: In BGP mode, all machines in the cluster establish BGP peering sessions with nearby routers that you control, and tell those routers how to forward traffic to the service IPs. Using BGP allows for true load balancing across multiple nodes
+
+
+I create a LoadBalancer with layer 2.
+
 ```
 $ kubectl get nodes -o wide
 NAME      STATUS   ROLES                  AGE   VERSION   INTERNAL-IP       EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME

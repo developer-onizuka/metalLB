@@ -11,6 +11,7 @@ kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.11.0/manif
 ```
 
 # 2. Configuration
+> https://blog.framinal.life/entry/2020/04/16/022042
 
 There are two types for network mode :
 

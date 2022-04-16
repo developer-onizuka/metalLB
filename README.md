@@ -57,6 +57,12 @@ BinaryData
 
 Events:  <none>
 ```
+The speaker pod controlled by daemonSet is running on each node.
+```
+$ kubectl get daemonsets.apps -n metallb-system 
+NAME      DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
+speaker   3         3         3       3            3           kubernetes.io/os=linux   8d
+```
 
 # 3. Apply yamlfile with LoadBalancer
 ```

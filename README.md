@@ -25,10 +25,17 @@ In Layer 2 mode, all communication for the issued IP is aggregated on one node. 
 
 ```
 $ kubectl get nodes -o wide
-NAME      STATUS   ROLES                  AGE   VERSION   INTERNAL-IP       EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
-master    Ready    control-plane,master   12d   v1.22.3   192.168.122.199   <none>        Ubuntu 20.04.3 LTS   5.11.0-38-generic   docker://20.10.10
-worker1   Ready    node                   12d   v1.22.3   192.168.122.134   <none>        Ubuntu 20.04.3 LTS   5.11.0-38-generic   docker://20.10.10
-worker2   Ready    node                   12d   v1.22.3   192.168.122.214   <none>        Ubuntu 20.04.3 LTS   5.11.0-38-generic   docker://20.10.10
+kubectl get nodes -o wide
+NAME      STATUS   ROLES                  AGE   VERSION   INTERNAL-IP      EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION      CONTAINER-RUNTIME
+master    Ready    control-plane,master   20m   v1.23.6   192.168.33.100   <none>        Ubuntu 20.04.3 LTS   5.4.0-97-generic    docker://20.10.12
+worker1   Ready    node                   19m   v1.23.6   192.168.33.101   <none>        Ubuntu 20.04.3 LTS   5.4.0-97-generic    docker://20.10.12
+worker2   Ready    node                   19m   v1.23.6   192.168.33.102   <none>        Ubuntu 20.04.3 LTS   5.4.0-97-generic    docker://20.10.12
+worker3   Ready    node                   19m   v1.23.6   192.168.33.103   <none>        Ubuntu 20.04.3 LTS   5.4.0-97-generic    docker://20.10.12
+worker4   Ready    node                   19m   v1.23.6   192.168.33.104   <none>        Ubuntu 20.04.3 LTS   5.4.0-97-generic    docker://20.10.12
+worker5   Ready    node                   19m   v1.23.6   192.168.33.105   <none>        Ubuntu 20.04.4 LTS   5.4.0-104-generic   docker://20.10.12
+worker6   Ready    node                   19m   v1.23.6   192.168.33.106   <none>        Ubuntu 20.04.4 LTS   5.4.0-104-generic   docker://20.10.12
+worker7   Ready    node                   19m   v1.23.6   192.168.33.107   <none>        Ubuntu 20.04.4 LTS   5.4.0-104-generic   docker://20.10.12
+worker8   Ready    node                   19m   v1.23.6   192.168.33.108   <none>        Ubuntu 20.04.4 LTS   5.4.0-104-generic   docker://20.10.12
 ```
 ```
 cat <<EOF | kubectl create -f -
@@ -43,7 +50,7 @@ data:
     - name: default
       protocol: layer2
       addresses:
-      - 192.168.122.220-192.168.122.250
+      - 192.168.33.220-192.168.33.250
 EOF
 ```
 ```
@@ -61,7 +68,7 @@ address-pools:
 - name: default
   protocol: layer2
   addresses:
-  - 192.168.122.220-192.168.122.250
+  - 192.168.33.220-192.168.33.250
 
 
 BinaryData
@@ -99,12 +106,12 @@ spec:
 ```
 $ kubectl get services
 NAME                                                    TYPE           CLUSTER-IP       EXTERNAL-IP       PORT(S)          AGE
-facerecognizer-srv                                      LoadBalancer   10.97.104.96     192.168.122.221   5000:32375/TCP   14h
+facerecognizer-srv                                      LoadBalancer   10.97.104.96     192.168.33.221    5000:32375/TCP   14h
 gpu-operator                                            ClusterIP      10.107.20.212    <none>            8080/TCP         12d
 gpu-operator-1635474989-node-feature-discovery-master   ClusterIP      10.101.66.193    <none>            8080/TCP         12d
 kubernetes                                              ClusterIP      10.96.0.1        <none>            443/TCP          12d
 
-$ curl 192.168.122.221:5000
+$ curl 192.168.33.221:5000
 <html>
   <head>
     <title>Wellcome</title>
@@ -177,7 +184,7 @@ facerecognizer-vsrv   ["facerecognizer-gateway"]   ["*"]   20s
 $ kubectl get service -n istio-system
 NAME                   TYPE           CLUSTER-IP       EXTERNAL-IP       PORT(S)                                      AGE
 grafana                ClusterIP      10.99.253.178    <none>            3000/TCP                                     4d17h
-istio-ingressgateway   LoadBalancer   10.108.210.157   192.168.122.220   15021:30468/TCP,80:31701/TCP,443:32689/TCP   4d18h
+istio-ingressgateway   LoadBalancer   10.108.210.157   192.168.33.220    15021:30468/TCP,80:31701/TCP,443:32689/TCP   4d18h
 istiod                 ClusterIP      10.106.19.192    <none>            15010/TCP,15012/TCP,443/TCP,15014/TCP        4d18h
 jaeger-collector       ClusterIP      10.99.26.141     <none>            14268/TCP,14250/TCP,9411/TCP                 4d17h
 kiali                  ClusterIP      10.99.179.7      <none>            20001/TCP,9090/TCP                           4d17h
@@ -186,7 +193,7 @@ tracing                ClusterIP      10.108.74.27     <none>            80/TCP,
 zipkin                 ClusterIP      10.101.155.214   <none>            9411/TCP                                     4d17h
 ```
 ```
-$ curl 192.168.122.220
+$ curl 192.168.33.220
 <html>
   <head>
     <title>Wellcome</title>
